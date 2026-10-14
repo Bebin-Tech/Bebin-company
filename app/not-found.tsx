@@ -1,0 +1,1 @@
+export default function NotFound(){return <main className="error-page"><span className="eyebrow">404 / PAGE NOT FOUND</span><h1>This page has moved on.</h1><p>The project or page you’re looking for may no longer be available.</p><a className="btn btn-primary" href="/projects">Explore projects</a><a className="btn btn-outline" href="/">Back to home</a></main>;}

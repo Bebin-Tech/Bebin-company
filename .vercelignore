@@ -1,0 +1,7 @@
+outputs/
+tests/
+.env*
+.local-storage/
+*.db*
+*.tsbuildinfo
+README.md

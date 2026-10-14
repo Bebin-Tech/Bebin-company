@@ -1,0 +1,2 @@
+'use client';
+export default function Error({reset}:{error:Error;reset:()=>void}){return <main className="error-page"><span className="eyebrow">LET’S TRY THAT AGAIN</span><h1>We couldn’t load this page.</h1><p>Please retry, or reach Bebin Tech directly for your project requirements.</p><button className="btn btn-primary" onClick={reset}>Try again</button><a className="btn btn-outline" href="https://wa.me/918807336368">Contact on WhatsApp</a></main>;}

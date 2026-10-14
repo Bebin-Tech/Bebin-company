@@ -1,0 +1,4 @@
+import {z} from 'zod';
+import {verifyPassword,createSession,limitLogin,sessionCookie} from '@/lib/auth';
+import {sameOrigin,jsonBody,result,failure,HttpError} from '@/lib/server';
+export async function POST(request:Request){try{sameOrigin(request);const credentials=z.object({email:z.string().email().max(200),password:z.string().min(8).max(300)}).strict().parse(await jsonBody(request));await limitLogin(request);const verified=await verifyPassword(credentials.password,process.env.ADMIN_PASSWORD_HASH||'');if(!verified||credentials.email.toLowerCase()!==(process.env.ADMIN_EMAIL||'').toLowerCase())throw new HttpError(401,'Email or password is incorrect.');const token=await createSession();const response=result({ok:true});response.headers.set('Set-Cookie',`${sessionCookie}=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400${process.env.NODE_ENV==='production'?'; Secure':''}`);return response;}catch(error){return failure(error);}}

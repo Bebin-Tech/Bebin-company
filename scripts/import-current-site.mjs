@@ -1,0 +1,17 @@
+import {createClient} from '@libsql/client';
+import {put,del} from '@vercel/blob';
+import {mkdir,writeFile} from 'node:fs/promises';
+const source='https://bebin-tech-studio.epicotter5.chatgpt.site';
+if(process.stdin.isTTY)process.stdin.setRawMode(true);
+console.log('Ready for source migration credential on stdin (input hidden).');
+const credential=await new Promise((resolve,reject)=>{let input='';process.stdin.setEncoding('utf8');process.stdin.on('data',chunk=>{input+=chunk;if(/[\r\n]/.test(input)){process.stdin.pause();try{resolve(JSON.parse(input.trim()));}catch(error){reject(error);}}});});
+const headers={'OAI-Sites-Authorization':'Bearer '+credential.token};
+const response=await fetch(source+'/api/catalog',{headers,redirect:'error'});if(!response.ok)throw Error('Source catalogue could not be read: '+response.status);const data=await response.json();
+if(data.items.some(item=>item.kind==='project'||item.kind==='product'))throw Error('Catalogue has changed. Reconcile all project/product and draft records before importing.');
+const db=createClient({url:process.env.TURSO_DATABASE_URL,authToken:process.env.TURSO_AUTH_TOKEN});
+const existing=await db.execute("SELECT value FROM settings WHERE key='migration_source'");if(existing.rows.length){console.log('Original site content is already imported.');db.close();process.exit(0);}
+const images=new Set([data.company.founderImage,...data.items.map(item=>item.image)].filter(Boolean));
+for(const image of images){if(!/^\/api\/media\/[a-f0-9-]{36}$/.test(image))throw Error('Unexpected source image path.');const id=image.split('/').pop(),file=await fetch(source+image,{headers,redirect:'error'});if(!file.ok)throw Error('Source image could not be read.');const type=file.headers.get('content-type');if(!['image/png','image/jpeg','image/webp','image/gif'].includes(type))throw Error('Unexpected image type.');const bytes=Buffer.from(await file.arrayBuffer());const blob=await put('bebin-images/'+id,bytes,{access:'private',contentType:type,addRandomSuffix:false});try{await db.execute({sql:'INSERT OR IGNORE INTO media(id,mime,size,created_at,blob_url) VALUES (?,?,?,?,?)',args:[id,type,bytes.length,new Date().toISOString(),blob.url]});}catch(error){await del(blob.url);throw error;}}
+const now=new Date().toISOString();const statements=data.items.map(item=>({sql:'INSERT OR IGNORE INTO content(id,kind,title,category,description,price,image,published,position,data,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',args:[item.id,item.kind,item.title,item.category,item.description,item.price,item.image,Number(item.published),item.position,JSON.stringify({stack:item.stack,features:item.features,technologies:item.technologies,icon:item.icon,delivery:item.delivery}),item.createdAt||now,item.updatedAt||now]}));
+statements.push({sql:"INSERT INTO settings(key,value) VALUES ('company',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",args:[JSON.stringify(data.company)]},{sql:"INSERT OR REPLACE INTO settings(key,value) VALUES ('initialized','true')",args:[]},{sql:"INSERT INTO settings(key,value) VALUES ('migration_source',?)",args:[JSON.stringify({source,importedAt:now})]});
+await db.batch(statements,'write');await mkdir('outputs',{recursive:true});await writeFile('outputs/migrated-catalogue.json',JSON.stringify(data,null,2));db.close();console.log('Imported '+data.items.length+' services/technologies and the existing company profile into the new database.');

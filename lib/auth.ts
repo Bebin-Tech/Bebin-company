@@ -1,0 +1,14 @@
+import 'server-only';
+import {cookies} from 'next/headers';
+import {randomBytes,createHash,scrypt,timingSafeEqual} from 'node:crypto';
+import {database} from './database';
+import {HttpError} from './http';
+export const sessionCookie='bebin_admin_session';
+const tokenHash=(token:string)=>createHash('sha256').update(token).digest('hex');
+const credentialVersion=()=>tokenHash(process.env.ADMIN_PASSWORD_HASH||'');
+export async function getAdminUser(){const token=(await cookies()).get(sessionCookie)?.value;if(!token||!/^[a-f0-9]{64}$/.test(token))return null;const row=await database().prepare('SELECT email,credential_version,expires_at FROM admin_sessions WHERE token_hash=?').bind(tokenHash(token)).first<{email:string;credential_version:string;expires_at:number}>();if(!row||row.expires_at<Date.now()||row.credential_version!==credentialVersion()||row.email.toLowerCase()!==(process.env.ADMIN_EMAIL||'').toLowerCase())return null;return {userId:row.email,email:row.email,displayName:'Bebin Tech Admin'};}
+export async function adminIdentity(){const user=await getAdminUser();if(!user)throw new HttpError(401,'Sign in to access the administrator workspace.');return user;}
+export async function verifyPassword(password:string,encoded:string){const [algorithm,salt,digest]=encoded.split(':');if(algorithm!=='scrypt'||!/^[a-f0-9]{32}$/.test(salt||'')||!/^[a-f0-9]{128}$/.test(digest||''))throw new HttpError(503,'Administrator authentication is not configured.');const actual=await new Promise<Buffer>((resolve,reject)=>scrypt(password,salt,64,{N:32768,r:8,p:1,maxmem:64*1024*1024},(error,key)=>error?reject(error):resolve(key)));return timingSafeEqual(actual,Buffer.from(digest,'hex'));}
+export async function createSession(){const token=randomBytes(32).toString('hex'),expiry=Date.now()+24*3600000;await database().prepare('INSERT INTO admin_sessions(token_hash,email,credential_version,expires_at) VALUES (?,?,?,?)').bind(tokenHash(token),process.env.ADMIN_EMAIL!.toLowerCase(),credentialVersion(),expiry).run();await database().prepare('DELETE FROM admin_sessions WHERE expires_at < ?').bind(Date.now()).run();return token;}
+export async function revokeSession(){const token=(await cookies()).get(sessionCookie)?.value;if(token)await database().prepare('DELETE FROM admin_sessions WHERE token_hash=?').bind(tokenHash(token)).run();}
+export async function limitLogin(request:Request){const window=Math.floor(Date.now()/900000);const ip=request.headers.get('x-vercel-forwarded-for')||request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()||'unknown';const key='login:'+tokenHash(`${ip}:${window}`);const attempt=await database().prepare('INSERT INTO rate_limits(key,count,expires_at) VALUES (?,1,?) ON CONFLICT(key) DO UPDATE SET count=count+1 RETURNING count').bind(key,(window+1)*900000).first<{count:number}>();if((attempt?.count||0)>6)throw new HttpError(429,'Too many sign-in attempts. Try again in 15 minutes.');}

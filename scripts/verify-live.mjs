@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+const base='https://bebin-tech-projects.vercel.app';
+for(const path of ['/','/about','/projects','/contact','/admin']) assert.equal((await fetch(base+path)).status,200,path);
+assert.equal((await fetch(base+'/api/admin/items')).status,401);
+const catalogue=await (await fetch(base+'/api/catalog')).json();
+assert.equal(catalogue.items.length,52);
+const password=(await readFile('outputs/initial-admin-login.txt','utf8')).match(/Password: (.+)/)[1];
+const headers={'Content-Type':'application/json','Origin':base,'X-Bebin-Request':'1'};
+const signed=await fetch(base+'/api/auth/login',{method:'POST',headers,body:JSON.stringify({email:'bbebinr@gmail.com',password})});
+assert.equal(signed.status,200);
+const setCookie=signed.headers.get('set-cookie');
+assert.match(setCookie,/HttpOnly/i);assert.match(setCookie,/Secure/i);assert.match(setCookie,/SameSite=strict/i);
+const Cookie=setCookie.split(';')[0];
+assert.equal((await fetch(base+'/api/admin/items',{headers:{Cookie}})).status,200);
+assert.equal((await fetch(base+'/api/auth/logout',{method:'POST',headers:{...headers,Cookie}})).status,200);
+assert.equal((await fetch(base+'/api/admin/items',{headers:{Cookie}})).status,401);
+console.log('PASS: public production pages, migrated catalogue, protected admin, secure login cookie and session revocation.');
