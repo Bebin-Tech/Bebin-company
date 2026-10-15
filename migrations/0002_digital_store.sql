@@ -1,0 +1,5 @@
+CREATE TABLE project_packages (handle TEXT PRIMARY KEY, variant_id TEXT UNIQUE NOT NULL, blob_url TEXT NOT NULL, filename TEXT NOT NULL, sha256 TEXT NOT NULL, size INTEGER NOT NULL, ready INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL);
+CREATE TABLE digital_orders (id TEXT PRIMARY KEY, email TEXT NOT NULL, currency TEXT NOT NULL, total TEXT NOT NULL, test INTEGER NOT NULL, paid_at TEXT NOT NULL, revoked INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE digital_deliveries (id TEXT PRIMARY KEY, order_id TEXT NOT NULL REFERENCES digital_orders(id), handle TEXT NOT NULL, filename TEXT NOT NULL, blob_url TEXT NOT NULL, token_hash TEXT UNIQUE NOT NULL, expires_at INTEGER NOT NULL, created_at TEXT NOT NULL, UNIQUE(order_id,handle));
+CREATE TABLE delivery_outbox (id TEXT PRIMARY KEY REFERENCES digital_deliveries(id), email TEXT NOT NULL, encrypted_token TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending_domain', attempts INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL);
+CREATE TABLE commerce_events (id TEXT PRIMARY KEY, topic TEXT NOT NULL, received_at TEXT NOT NULL);

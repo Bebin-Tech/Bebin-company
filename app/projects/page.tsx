@@ -1,5 +1,3 @@
-import { Site } from '@/components/site';
-import { publicData } from '@/lib/server';
-export const dynamic='force-dynamic';
-export const metadata={title:'Final-Year Project Store',description:'Browse college and final-year projects by category and technology. Enquire about packages, customization, and source code.'};
-export default async function Page({searchParams}:{searchParams:Promise<{category?:string;technology?:string}>}){const query=await searchParams;return <Site mode="projects" data={await publicData()} initialCategory={query.category} initialTech={query.technology}/>;}
+import {ProjectStore} from '@/components/project-store';import {publicData} from '@/lib/server';import {softwareProjects,type SoftwareProject} from '@/lib/shopify';
+export const dynamic='force-dynamic';export const metadata={title:'Software Project Store',description:'Explore software projects for IT, AI and Data Science, BCA and Computer Science with source code and setup guides.'};
+export default async function Page(){const {company}=await publicData();let projects:SoftwareProject[]=[],unavailable=false;try{projects=await softwareProjects();}catch{unavailable=true;}return <ProjectStore company={company} projects={projects} unavailable={unavailable}/>;}
