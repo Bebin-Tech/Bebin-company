@@ -1,6 +1,7 @@
 import { siteUrl } from '@/lib/site-url';
 import type { Metadata } from "next";
 import "./globals.css";
+import "./redesign.css";
 
 export const metadata: Metadata = {
   title: { default: 'Bebin Tech — Academic Projects & Software Solutions', template: '%s | Bebin Tech' },
