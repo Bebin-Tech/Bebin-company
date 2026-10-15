@@ -1,6 +1,39 @@
 {
-  "name":"bebin-tech-vercel","version":"1.0.0","private":true,"type":"module","engines":{"node":"24.x"},
-  "scripts":{"dev":"next dev --hostname 127.0.0.1 --port 3000","build":"next build","start":"next start --hostname 127.0.0.1 --port 3000","db:migrate":"node --env-file-if-exists=.env.local scripts/migrate.mjs","admin:credentials":"node scripts/create-admin-credentials.mjs","check":"tsc --noEmit"},
-  "dependencies":{"@libsql/client":"^0.17.0","@vercel/blob":"^2.8.0","lucide-react":"^1.31.0","next":"16.3.8","react":"19.2.6","react-dom":"19.2.6","server-only":"^0.0.1","zod":"^3.25.76"},
-  "devDependencies":{"@types/node":"^22.19.19","@types/react":"^19.2.14","@types/react-dom":"^19.2.3","typescript":"^5.9.3","@tailwindcss/postcss":"4.2.1","tailwindcss":"4.2.1"}
+  "name": "bebin-tech-vercel",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1 --port 3000",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1 --port 3000",
+    "db:migrate": "node --env-file-if-exists=.env.local scripts/migrate.mjs",
+    "admin:credentials": "node scripts/create-admin-credentials.mjs",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.0",
+    "@vercel/blob": "^2.8.0",
+    "lucide-react": "^1.31.0",
+    "next": "16.3.8",
+    "nodemailer": "^10.1.1",
+    "qrcode": "^1.5.4",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "server-only": "^0.0.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.2.1",
+    "@types/node": "^22.19.19",
+    "@types/nodemailer": "^8.0.2",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "tailwindcss": "4.2.1",
+    "typescript": "^5.9.3"
+  }
 }
