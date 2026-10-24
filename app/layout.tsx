@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: { default: 'Bebin Tech — Academic Projects & Software Solutions', template: '%s | Bebin Tech' },
   description: 'Innovative Software Solutions for Students and Businesses. Final-year and college projects, ERP solutions, web applications, and mobile development by Bebin Tech.',
   metadataBase: new URL(siteUrl()),
+  verification: process.env.GOOGLE_SITE_VERIFICATION ? {google:process.env.GOOGLE_SITE_VERIFICATION} : undefined,
   openGraph: { title:'Bebin Tech — Ideas into Innovation', description:'Academic projects and professional software development for students, colleges, startups, and businesses.', type:'website', images:['/bebin-logo.png'] },
   icons: {
     icon: "/bebin-logo.png",
