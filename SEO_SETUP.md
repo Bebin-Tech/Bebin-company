@@ -2,6 +2,14 @@
 
 Production URL: https://bebin-tech-projects.vercel.app/
 
+## Current setup — 25 October 2026
+
+- Google Search Console ownership verified using the HTML meta tag. Keep `GOOGLE_SITE_VERIFICATION` configured in Vercel Production; it is deployment configuration, not a source-code change.
+- Google processed `/sitemap.xml` successfully and discovered all 14 public pages.
+- The manual homepage indexing request hit Google's daily quota. No new manual indexing requests were accepted for the homepage or seven project pages in that attempt. Retry after the quota resets; sitemap discovery does not mean the pages are indexed.
+
+## Setup and future maintenance
+
 1. Open https://search.google.com/search-console and add a **URL prefix** property for the exact production URL above.
 2. Choose the HTML tag verification method. Set the tag's `content` value as the Vercel production environment variable `GOOGLE_SITE_VERIFICATION`, then redeploy. The app renders this value in its Google verification meta tag. Do not paste the entire HTML tag into the variable.
 3. Verify ownership in Search Console. Submit `https://bebin-tech-projects.vercel.app/sitemap.xml` under Sitemaps.
