@@ -19,11 +19,26 @@ const profile=structured(profileHtml).find(data=>data['@type']==='ProfilePage');
 assert.equal(profile.mainEntity.name,'Bebin R');
 assert.equal(profile.mainEntity.image,canonical+'/founder-profile.jpg');
 assert.ok(profile.mainEntity.sameAs.includes('https://bebin-tech.vercel.app/'));
+assert.equal(profile.primaryImageOfPage.contentUrl,canonical+'/founder-profile.jpg');
+const aboutHtml=await (await fetch(base+'/about')).text();
+const about=structured(aboutHtml).find(data=>data['@type']==='AboutPage');
+assert.equal(about.primaryImageOfPage.contentUrl,profile.primaryImageOfPage.contentUrl);
+assert.ok(about.about.some(entity=>entity['@id']===profile.mainEntity['@id']));
+const aboutMain=aboutHtml.match(/<main id="main">([\s\S]*?)<\/main>/)?.[1];
+assert.ok(aboutMain?.includes('src="/founder-profile.jpg"'));
+assert.ok(!aboutMain.includes('src="/bebin-logo.png"'),'About content prioritizes the founder portrait');
+assert.ok(aboutMain.includes('href="/bebin-r"'),'Founder biography link');
+for(const html of [profileHtml,aboutHtml]){
+  assert.ok(html.includes('max-image-preview:large'));
+  assert.ok(html.includes('property="og:image" content="'+canonical+'/founder-profile.jpg"'));
+}
 assert.ok(profileHtml.includes('property="og:image" content="'+canonical+'/founder-profile.jpg"'));
 const portrait=await fetch(base+'/founder-profile.jpg');assert.equal(portrait.status,200);assert.match(portrait.headers.get('content-type')||'',/image/);
 const filtered=await (await fetch(base+'/projects?q=management')).text();assert.ok(filtered.includes('name="robots" content="noindex, follow"'));
 const admin=await fetch(base+'/admin');assert.match(admin.headers.get('x-robots-tag')||'',/noindex/);
 const missing=await fetch(base+'/projects/does-not-exist');assert.equal(missing.status,404);
 const sitemap=await (await fetch(base+'/sitemap.xml')).text();assert.equal((sitemap.match(/<loc>/g)||[]).length,15);assert.ok(!/\/admin|\/api\/|\.zip/.test(sitemap));
+assert.equal((sitemap.match(/<image:loc>/g)||[]).length,2);
+assert.ok(sitemap.includes('<image:loc>'+canonical+'/founder-profile.jpg</image:loc>'));
 const robots=await (await fetch(base+'/robots.txt')).text();assert.ok(robots.includes(`Sitemap: ${canonical}/sitemap.xml`));
 console.log('SEO checks passed: 15 canonical pages, seven actual product prices, structured data, filtered search, admin noindex, 404, sitemap and robots.');

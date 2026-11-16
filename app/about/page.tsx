@@ -1,7 +1,9 @@
-import {pageMetadata} from '@/lib/seo';
+import {absoluteUrl,pageMetadata} from '@/lib/seo';
+import {StructuredData} from '@/components/structured-data';
+import {founderPortrait} from '@/lib/founder';
 import { Site } from '@/components/site';
 import { publicData } from '@/lib/server';
 export const dynamic='force-dynamic';
 const base=pageMetadata('About Bebin Tech & Founder Bebin R','Meet Bebin Tech and founder Bebin R, a software developer specializing in web, mobile, custom software, and ERP solutions.','/about');
-export const metadata={...base,openGraph:{...base.openGraph,images:[{url:'/founder-profile.jpg',alt:'Bebin R — Founder & Software Developer'}]},twitter:{...base.twitter,images:['/founder-profile.jpg']}};
-export default async function Page(){return <Site mode="about" data={await publicData()}/>;}
+export const metadata={...base,robots:{index:true,follow:true,'max-image-preview':'large' as const},openGraph:{...base.openGraph,images:[{url:founderPortrait.url,width:460,height:460,alt:founderPortrait.caption}]},twitter:{...base.twitter,card:'summary_large_image' as const,images:[founderPortrait.url]}};
+export default async function Page(){const data=await publicData();return <><StructuredData data={{'@context':'https://schema.org','@type':'AboutPage',url:absoluteUrl('/about'),name:'About Bebin Tech & Founder Bebin R',primaryImageOfPage:founderPortrait,about:[{'@type':'Organization','@id':absoluteUrl('/#organization'),name:'Bebin Tech',url:absoluteUrl('/')},{'@type':'Person','@id':absoluteUrl('/bebin-r#person'),name:'Bebin R',url:absoluteUrl('/bebin-r'),image:founderPortrait.url,description:data.company.biography}]}}/><Site mode="about" data={data}/></>;}
