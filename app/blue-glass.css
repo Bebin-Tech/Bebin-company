@@ -121,6 +121,8 @@ input, select, textarea { background: var(--surface); color: var(--text); border
 input::placeholder, textarea::placeholder { color: #677c7d; opacity: 1; }
 .project-preview, .about-art, .founder-photo { background: #dce9e3; border-color: var(--line); }
 .project-preview figcaption { background: var(--surface); color: #4d696a; border-color: var(--line); }
+.portfolio-founder-photo { height: auto; aspect-ratio: 320 / 380; }
+.portfolio-founder-photo > img { object-position: center 15%; }
 .icon-tile, .blue { background: #dcece7; color: var(--blue); }
 .store-assurances svg { color: var(--blue); }
 .store-assurances > span { color: #405f63; }
