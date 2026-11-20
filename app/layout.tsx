@@ -10,10 +10,10 @@ export const metadata: Metadata = {
   description: 'Innovative Software Solutions for Students and Businesses. Final-year and college projects, ERP solutions, web applications, and mobile development by Bebin Tech.',
   metadataBase: new URL(siteUrl()),
   verification: process.env.GOOGLE_SITE_VERIFICATION ? {google:process.env.GOOGLE_SITE_VERIFICATION} : undefined,
-  openGraph: { title:'Bebin Tech — Ideas into Innovation', description:'Academic projects and professional software development for students, colleges, startups, and businesses.', type:'website', images:['/bebin-logo.png'] },
+  openGraph: { title:'Bebin Tech — Ideas into Innovation', description:'Academic projects and professional software development for students, colleges, startups, and businesses.', type:'website', images:['/bebin-logo-clear.webp'] },
   icons: {
-    icon: "/bebin-logo.png",
-    shortcut: "/bebin-logo.png",
+    icon: "/bebin-icon.png",
+    shortcut: "/bebin-icon.png",
   },
 };
 
