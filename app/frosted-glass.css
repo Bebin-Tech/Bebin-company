@@ -1,0 +1,86 @@
+/* Frosted surfaces in the Blue Glass palette, approved in the local preview. */
+body {
+  background:
+    radial-gradient(ellipse at 3% 10%, #9acfc8c7, transparent 52%),
+    radial-gradient(ellipse at 98% 55%, #c4c6b4c2, transparent 48%),
+    #e9efe5;
+  background-attachment: fixed;
+}
+.market-home { background: transparent; }
+.header, .market-header {
+  background: #f7faf2b8;
+  border-bottom-color: #ffffffed;
+  box-shadow: 0 8px 30px #214c4a14, inset 0 -1px 0 #ffffff;
+  -webkit-backdrop-filter: blur(24px) saturate(125%);
+  backdrop-filter: blur(24px) saturate(125%);
+}
+.market-nav-wrap { background: #c7e3e166; border-top-color: #ffffffc2; }
+.commerce-hero, .hero, .page-hero, .store-hero {
+  background:
+    radial-gradient(ellipse at 92% 18%, #fbfff2b3, transparent 42%),
+    radial-gradient(ellipse at 70% 85%, #7bb9b080, transparent 46%),
+    linear-gradient(115deg, #c7e3e170, #e8ece166 55%, #d7d6ca99);
+  border-bottom: 1px solid #ffffffed;
+}
+.featured-product-hero {
+  background: linear-gradient(135deg, #ffffffa6, #ffffff47 65%, #f3fae77a);
+  border: 1px solid #ffffff;
+  box-shadow: 0 22px 50px #214c4a26, inset 0 2px 0 #ffffff, inset 0 -1px 0 #ffffff99;
+  -webkit-backdrop-filter: blur(24px) saturate(130%);
+  backdrop-filter: blur(24px) saturate(130%);
+}
+.software-card, .project-card, .service-card, .modern-service,
+.technology-card, .product-card, .why-grid article,
+.shop-filter-sidebar, .store-controls, .order-panel, .contact-form {
+  background: linear-gradient(135deg, #ffffffd1, #f9fff3a6);
+  border-color: #ffffff;
+  box-shadow: 0 12px 32px #214c4a14, inset 0 2px 0 #ffffff;
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  backdrop-filter: blur(18px) saturate(120%);
+}
+.software-card:hover, .project-card:hover, .modern-service:hover {
+  box-shadow: 0 14px 34px #214c4a14, inset 0 1px 0 #ffffff;
+  border-color: #a8c9c4;
+}
+.department-cards > a:nth-child(n) {
+  background: linear-gradient(135deg, #ffffffbf, #e7f3e88c);
+  border-color: #ffffff;
+  box-shadow: 0 8px 22px #214c4a12, inset 0 2px 0 #ffffff;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.department-cards > a:nth-child(3n + 2) { background: linear-gradient(135deg, #e1f4edb3, #c7e3e166); }
+.department-cards > a:nth-child(3n) { background: linear-gradient(135deg, #f8f8ebbf, #d7d6ca70); }
+.marketplace-products, .soft { background: #cfdfd326; }
+.commerce-benefits, .market-home .purchase-path { background: #f3f5eb80; }
+.budget-promo { background: linear-gradient(130deg, #d7d6ca99, #f2f3e8b3); }
+.custom-promo { background: linear-gradient(130deg, #c7e3e1b3, #e4efe5b3); }
+.shop-promo { border-color: #ffffffc2; box-shadow: inset 0 1px 0 #ffffffb3; }
+
+/* Photos, project previews, fields and primary actions stay fully opaque. */
+.hero-product-preview, input, select, textarea,
+.store-controls input, .store-controls select, .upi-checkout input {
+  background: #fcfcf8;
+}
+.market-search { background: #fcfcf8; }
+.header nav.open, .market-header nav.open { background: #f4f8ef; }
+@media (max-width: 800px) {
+  body { background-attachment: scroll; }
+  .header, .market-header { background: #f7faf2d6; }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .header, .market-header, .featured-product-hero,
+  .software-card, .project-card, .service-card, .modern-service,
+  .technology-card, .product-card, .why-grid article,
+  .shop-filter-sidebar, .store-controls, .order-panel, .contact-form { background: #f7faf2; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .header, .market-header, .featured-product-hero,
+  .software-card, .project-card, .service-card, .modern-service,
+  .technology-card, .product-card, .why-grid article,
+  .shop-filter-sidebar, .store-controls, .order-panel, .contact-form {
+    background: #f7faf2;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
