@@ -12,6 +12,11 @@
 }
 
 body, .market-home { background: #f5f5ef; }
+.brand > span, .market-header .brand > span {
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -.9px;
+}
 .topbar { background: var(--navy); color: #dfede7; }
 .topbar a { color: #f6faf5; }
 .header, .market-header {
@@ -137,4 +142,8 @@ input::placeholder, textarea::placeholder { color: #677c7d; opacity: 1; }
 @media (max-width: 800px) {
   .market-header nav.open, .header nav.open { background: #f4f7ee; border-color: var(--line); }
   .market-header { background: #f5f8f0f5; }
+}
+
+@media (max-width: 520px) {
+  .brand > span, .market-header .brand > span { font-size: 26px; }
 }
