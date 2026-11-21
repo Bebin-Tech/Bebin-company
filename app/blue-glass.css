@@ -135,28 +135,33 @@ input::placeholder, textarea::placeholder { color: #677c7d; opacity: 1; }
 .portfolio-founder-photo { height: auto; aspect-ratio: 660 / 652; }
 .portfolio-founder-photo > img { object-position: center 15%; }
 .portfolio-founder-photo .founder-photo-tag {
+  left: 16px;
+  right: auto;
+  bottom: 16px;
+  width: max-content;
+  max-width: calc(100% - 32px);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 5px;
-  padding: 17px 20px;
+  gap: 3px;
+  padding: 10px 14px;
   background: #f8fcf5f5;
   border: 1px solid #c7e3e1;
-  border-radius: 12px;
+  border-radius: 9px;
   box-shadow: 0 8px 28px #00000029;
   backdrop-filter: blur(12px);
 }
 .portfolio-founder-photo .founder-photo-tag strong {
   font-family: Manrope, sans-serif;
-  font-size: clamp(22px, 2vw, 28px);
+  font-size: 20px;
   font-weight: 800;
   line-height: 1.2;
   color: #193b40;
 }
 .portfolio-founder-photo .founder-photo-tag span {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  line-height: 1.5;
+  line-height: 1.4;
   color: #28555b;
 }
 .icon-tile, .blue { background: #dcece7; color: var(--blue); }
