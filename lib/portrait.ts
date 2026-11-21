@@ -1,7 +1,8 @@
-export const portfolioPortraitPath='/bebin-r-portrait.png';
+export const founderPortraitPath='/bebin-r-founder.jpg';
 
 // Replace the old default portrait while preserving future admin photo uploads.
 export function aboutPortraitPath(configured:string){
-  return !configured || configured==='/founder-profile.jpg' || configured==='https://bebin-tech-projects.vercel.app/founder-profile.jpg'
-    ? portfolioPortraitPath : configured;
+  const previous=['/founder-profile.jpg','/bebin-r-portrait.png'];
+  return !configured || previous.some(path=>configured===path || configured==='https://bebin-tech-projects.vercel.app'+path)
+    ? founderPortraitPath : configured;
 }
