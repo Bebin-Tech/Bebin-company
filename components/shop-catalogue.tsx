@@ -84,7 +84,7 @@ export function ShopCatalogue({projects, unavailable, initialQuery, initialDepar
   </div>;
 }
 
-function ShopProjectCard({project}: {project: SoftwareProject}) {
+export function ShopProjectCard({project}: {project: SoftwareProject}) {
   const image = project.images.nodes[0];
   const technologies = project.tags.filter(tag => tag.startsWith('technology:')).map(tag => tag.slice(11));
   const available = project.variants.nodes[0]?.availableForSale;

@@ -1,7 +1,64 @@
 import type {SiteData} from '@/lib/models';
 import type {SoftwareProject} from '@/lib/shopify';
-import {Header,Footer} from './site';
-import {SoftwareCard,projectPrice} from './software-card';
-import {ArrowRight,ArrowUpRight,GraduationCap,BrainCircuit,Code2,FileCode2,ShieldCheck,Headphones,Download,Check,Search} from 'lucide-react';
-const categories=[['IT','Information Technology',Code2],['AI & Data Science','AI & Data Science',BrainCircuit],['B.Sc Computer Science','B.Sc Computer Science',GraduationCap],['BCA','BCA Projects',FileCode2],['MCA','MCA Projects',Code2],['Computer Science','Computer Science',GraduationCap]] as const;
-export function ModernHome({data,projects}:{data:SiteData;projects:SoftwareProject[]}){const featured=projects.find(p=>p.handle==='placement-app')||projects[0];const minimum=projects.length?Math.min(...projects.map(p=>Number(p.variants.nodes[0]?.price.amount)||Infinity)):null;return <><Header company={data.company} mode="home"/><main id="main" className="market-home"><section className="commerce-hero"><div className="container commerce-hero-grid"><div><span className="sale-kicker">THE SOFTWARE PROJECT STORE</span><h1>Your next project.<br/><span>Ready to make<br/>your own.</span></h1><p>Explore final-year software projects for IT, BCA, B.Sc Computer Science and AI & Data Science, with complete source code, database setup and a practical installation guide.</p><div className="commerce-hero-actions"><a className="btn btn-primary" href="/projects">Shop all projects <ArrowRight size={18}/></a>{minimum!==null&&Number.isFinite(minimum)&&<span>Projects from <strong>₹{minimum.toLocaleString('en-IN')}</strong></span>}</div><div className="commerce-hero-checks"><span><Check size={15}/>Source code included</span><span><Check size={15}/>Pay with GPay / UPI</span></div></div><div className="featured-product-hero"><div className="hero-product-label"><span>EXPLORE THE COLLECTION</span><span>{projects.length} software projects</span></div>{featured&&<a href={`/projects/${featured.handle}`} className="hero-product-preview"><img src={featured.images.nodes[0]?.url||'/project-previews/placement-app.svg'} alt={featured.images.nodes[0]?.altText||featured.title} width={1000} height={600}/><div><span>FEATURED PROJECT</span><h2>{featured.title}</h2><strong>{projectPrice(featured)}</strong><span className="btn btn-primary">View project <ArrowUpRight size={16}/></span></div></a>}<div className="hero-package-note"><FileCode2 size={18}/><span>Frontend + backend + database + setup guide</span></div></div></div></section><section className="commerce-benefits"><div className="container">{[[FileCode2,'Complete source code','Explore and customize your project'],[ShieldCheck,'Verified payment review','Downloads unlock after admin approval'],[Download,'Private ZIP delivery','Your download link, straight to your email'],[Headphones,'Talk to the developer','Get help choosing the right project']].map(([Icon,title,text])=>{const BenefitIcon=Icon as typeof FileCode2;return <div key={String(title)}><BenefitIcon size={24}/><span><strong>{String(title)}</strong><small>{String(text)}</small></span></div>;})}</div></section><section className="section category-shopping"><div className="container"><div className="shop-heading"><div><span className="eyebrow">FIND YOUR FIT</span><h2>Shop by department</h2></div><a href="/projects" className="text-link">All departments <ArrowRight size={16}/></a></div><div className="department-cards">{categories.map(([department,title,Icon])=><a key={department} href={`/projects?department=${encodeURIComponent(department)}`}><span><Icon size={26}/></span><h3>{title}</h3><small>Explore projects <ArrowUpRight size={13}/></small></a>)}</div></div></section><section className="section marketplace-products" id="featured-projects"><div className="container"><div className="shop-heading"><div><span className="eyebrow">SOURCE CODE. SETUP GUIDE. POSSIBILITIES.</span><h2>Explore the project collection</h2><p>Compare your options. Choose your project. Start building.</p></div><a href="/projects" className="btn btn-outline">Browse all projects <ArrowRight size={16}/></a></div><div className="shopping-shortcuts"><a href="/projects">All projects</a><a href="/projects?department=AI%20%26%20Data%20Science">AI & data science</a><a href="/projects?q=management">Management systems</a><a href="/projects?maxPrice=2000">₹2,000 & under</a></div>{projects.length?<div className="store-grid market-product-grid">{projects.map(project=><SoftwareCard key={project.id} project={project}/>)}</div>:<div className="store-empty"><Search size={30}/><h3>The collection is temporarily unavailable.</h3><p>Please try again shortly or contact us for project help.</p><a className="btn btn-primary" href="/projects">Open the project store</a></div>}</div></section><section className="section shop-promo-section"><div className="container shop-promos"><a href="/projects?maxPrice=2000" className="shop-promo budget-promo"><span className="eyebrow">FIND A PROJECT FOR YOUR BUDGET</span><h2>Big possibilities.<br/>Smaller budgets.</h2><p>Explore software projects priced at ₹2,000 or less.</p><span className="text-link">Shop affordable projects <ArrowRight size={17}/></span></a><a href="/contact?type=Custom%20Software%20Project" className="shop-promo custom-promo"><span className="eyebrow">HAVE SOMETHING SPECIFIC IN MIND?</span><h2>Your requirements.<br/>Your custom project.</h2><p>Talk to us about features, technologies and custom software development.</p><span className="text-link">Discuss a custom project <ArrowRight size={17}/></span></a></div></section><section className="section purchase-path"><div className="container"><div className="shop-heading"><div><span className="eyebrow">A CLEAR WAY TO BUY</span><h2>From project to your inbox</h2></div><p>No download is released before your payment is checked.</p></div><div className="purchase-steps">{[['01','Choose your project','Review its preview, features, technologies and listed price.'],['02','Pay & submit proof','Pay the exact amount with UPI, upload your screenshot and submit the purchase request.'],['03','Approval & delivery','After admin verification of the actual payment, your private ZIP download link is emailed to you.']].map(([n,title,text])=><article key={n}><span>{n}</span><h3>{title}</h3><p>{text}</p></article>)}</div></div></section></main><Footer company={data.company}/></>;}
+import {Header, Footer} from './site';
+import {projectPrice} from './software-card';
+import {ShopProjectCard} from './shop-catalogue';
+import {BrainCircuit, Code2, GraduationCap, Layers3, Smartphone, FileCode2, ShieldCheck, Mail} from 'lucide-react';
+
+const departments = ['IT', 'AI & Data Science', 'B.Sc Computer Science', 'BCA', 'MCA', 'Computer Science'];
+const services = [
+  {title: 'Web development', description: 'Websites, portals, and custom web applications.', icon: Code2, type: 'Web Development'},
+  {title: 'Mobile applications', description: 'Android and cross-platform applications.', icon: Smartphone, type: 'Mobile App Development'},
+  {title: 'ERP & business software', description: 'Management systems built around your workflow.', icon: Layers3, type: 'ERP Software'},
+];
+
+export function ModernHome({data, projects}: {data: SiteData; projects: SoftwareProject[]}) {
+  const featured = projects.find(project => project.handle === 'placement-app') || projects[0];
+  const prices = projects.map(project => Number(project.variants.nodes[0]?.price.amount)).filter(price => Number.isFinite(price) && price > 0);
+  const minimum = prices.length ? Math.min(...prices) : null;
+
+  return <div className="home-refresh">
+    <Header company={data.company} mode="home"/>
+    <main id="main">
+      <section className="home-intro">
+        <div className="container home-intro-grid">
+          <div className="home-intro-copy">
+            <h1>Find your next<br/><span>software project.</span></h1>
+            <p>Practical projects with source code, database setup, and an installation guide.</p>
+            <div className="home-intro-actions"><a className="home-primary" href="/projects">Shop projects</a><a className="home-secondary" href="/contact?type=Custom%20Project">Custom development</a></div>
+            {minimum !== null && <div className="home-starting-price">Projects from <strong>₹{minimum.toLocaleString('en-IN')}</strong></div>}
+          </div>
+          {featured ? <a className="home-feature" href={`/projects/${featured.handle}`} aria-label={`View featured project: ${featured.title}`}>
+            <div className="home-feature-top"><span>Featured project</span><Code2 size={20} aria-hidden="true"/></div>
+            <div className="home-feature-image">{featured.images.nodes[0]
+              ? <img src={featured.images.nodes[0].url} alt={featured.images.nodes[0].altText || `${featured.title} preview`} width={1000} height={600} fetchPriority="high"/>
+              : <Code2 size={72} aria-hidden="true"/>}</div>
+            <div className="home-feature-bottom"><div><h2>{featured.title}</h2><span>View project details</span></div><strong>{projectPrice(featured)}</strong></div>
+          </a> : <div className="home-feature-placeholder"><Code2 size={56} aria-hidden="true"/><h2>Built for your next idea</h2><a href="/contact">Discuss a project</a></div>}
+        </div>
+      </section>
+      <section className="home-departments container" aria-label="Browse projects by department">
+        <div className="home-department-label"><GraduationCap size={21} aria-hidden="true"/><span>Projects for</span></div>
+        <div>{departments.map(department => <a key={department} href={`/projects?department=${encodeURIComponent(department)}`}>{department}</a>)}</div>
+      </section>
+      <section className="home-collection container" id="featured-projects">
+        <div className="home-section-heading"><h2>Explore projects</h2><a href="/projects">View all{projects.length ? ` ${projects.length} projects` : ' projects'}</a></div>
+        {projects.length ? <div className="catalogue-grid home-products-grid">{projects.slice(0, 4).map(project => <ShopProjectCard key={project.id} project={project}/>)}</div>
+          : <div className="catalogue-empty"><h3>Projects are temporarily unavailable</h3><a href="/projects">Try the project store</a></div>}
+        <div className="home-collection-links"><a href="/projects?maxPrice=2000">Projects up to ₹2,000</a><a href="/projects?department=AI%20%26%20Data%20Science"><BrainCircuit size={17} aria-hidden="true"/>AI & data science projects</a></div>
+      </section>
+      <section className="home-delivery container" aria-label="Purchase and delivery">
+        <div><FileCode2 size={23} aria-hidden="true"/><span>Choose your project</span></div>
+        <div><ShieldCheck size={23} aria-hidden="true"/><span>Pay with UPI · Admin verifies</span></div>
+        <div><Mail size={23} aria-hidden="true"/><span>Receive your download by email</span></div>
+      </section>
+      <section className="home-services container">
+        <div className="home-section-heading"><div><h2>Built for your business</h2><p>Need something custom? Let’s build it.</p></div><a href="/services">All services</a></div>
+        <div className="home-services-grid">{services.map(service => <a key={service.title} href={`/contact?type=${encodeURIComponent(service.type)}`}>
+          <span className="home-service-icon"><service.icon size={25} aria-hidden="true"/></span><h3>{service.title}</h3><p>{service.description}</p><span className="home-service-action">Discuss your requirements</span>
+        </a>)}</div>
+      </section>
+    </main>
+    <Footer company={data.company}/>
+  </div>;
+}
