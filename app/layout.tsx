@@ -5,6 +5,7 @@ import "./redesign.css";
 import "./commerce.css";
 import "./blue-glass.css";
 import "./frosted-glass.css";
+import "./catalogue.css";
 
 export const metadata: Metadata = {
   title: { default: 'Bebin Tech — Academic Projects & Software Solutions', template: '%s | Bebin Tech' },
