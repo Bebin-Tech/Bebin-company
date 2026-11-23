@@ -5,7 +5,7 @@ import {founderPortraitPath} from '@/lib/portrait';
 import {publicData} from '@/lib/server';
 import {absoluteUrl, pageMetadata} from '@/lib/seo';
 
-export const dynamic='force-dynamic';
+export const revalidate=60;
 const title='Bebin R — Software Developer & Founder of Bebin Tech';
 const description='Meet Bebin R, founder of Bebin Tech. Explore his biography, web and mobile development expertise, software projects, portfolio and official links.';
 const photo=founderPortrait.url;

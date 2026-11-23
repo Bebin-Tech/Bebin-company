@@ -1,3 +1,4 @@
+export const maxDuration=60;
 import {adminIdentity,database,sameOrigin,jsonBody,result,failure,HttpError} from '@/lib/server';
 import {approveManual,sendManualEmail} from '@/lib/manual-upi';
 import {z} from 'zod';

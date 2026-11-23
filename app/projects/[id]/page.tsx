@@ -4,7 +4,8 @@ import {publicData} from '@/lib/server';
 import {softwareProjects} from '@/lib/shopify';
 import {absoluteUrl,pageMetadata} from '@/lib/seo';
 import {notFound} from 'next/navigation';
-export const dynamic='force-dynamic';
+export const revalidate=60;
+export async function generateStaticParams(){return [];}
 type Props={params:Promise<{id:string}>};
 export async function generateMetadata({params}:Props){
   const {id}=await params;

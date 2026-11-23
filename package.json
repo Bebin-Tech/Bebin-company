@@ -12,7 +12,9 @@
     "start": "next start --hostname 127.0.0.1 --port 3000",
     "db:migrate": "node --env-file-if-exists=.env.local scripts/migrate.mjs",
     "admin:credentials": "node scripts/create-admin-credentials.mjs",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "test:scaling": "node tests/scaling.mjs",
+    "test:load:read": "node scripts/load-readonly.mjs"
   },
   "dependencies": {
     "@libsql/client": "^0.17.0",

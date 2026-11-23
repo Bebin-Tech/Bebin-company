@@ -3,7 +3,7 @@ import {StructuredData} from '@/components/structured-data';
 import {founderPortrait} from '@/lib/founder';
 import { Site } from '@/components/site';
 import { publicData } from '@/lib/server';
-export const dynamic='force-dynamic';
+export const revalidate=60;
 const base=pageMetadata('About Bebin Tech & Founder Bebin R','Meet Bebin Tech and founder Bebin R, a software developer specializing in web, mobile, custom software, and ERP solutions.','/about');
 const aboutPortrait={...founderPortrait,'@id':absoluteUrl('/about#portrait')};
 export const metadata={...base,robots:{index:true,follow:true,'max-image-preview':'large' as const},openGraph:{...base.openGraph,images:[{url:aboutPortrait.url,width:aboutPortrait.width,height:aboutPortrait.height,alt:aboutPortrait.caption}]},twitter:{...base.twitter,card:'summary_large_image' as const,images:[aboutPortrait.url]}};
