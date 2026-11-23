@@ -29,18 +29,6 @@
 .module-callout h2 { font-size: 23px; line-height: 1.4; letter-spacing: -.6px; color: #1e454c; margin: 0 0 7px; }
 .module-callout p { font-size: 15px; line-height: 1.7; color: #57767a; margin: 0; }
 .module-callout>.btn { flex-shrink: 0; }
-.module-product-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 26px; }
-.module-product-card { background: #ffffffd4; border: 1px solid #fff; border-radius: 20px; overflow: hidden; }
-.module-product-image { aspect-ratio: 5/2.8; background: #dcece7; display: flex; justify-content: center; align-items: center; color: #467a7d; border-bottom: 1px solid #d6e4df; }
-.module-product-image img { width: 100%; height: 100%; object-fit: cover; }
-.module-product-body { padding: 26px; }
-.module-category { display: block; color: #4a7a7e; font-size: 13px; margin-bottom: 9px; }
-.module-product-body h2 { font-size: 25px; letter-spacing: -.7px; line-height: 1.35; margin: 0 0 14px; color: #20454d; }
-.module-product-body>p { font-size: 15px; line-height: 1.8; color: #597277; margin-bottom: 20px; }
-.module-features { padding-block: 15px; margin-block: 12px; border-block: 1px solid #dae6e1; font-size: 14px; color: #456a70; }
-.module-features summary { cursor: pointer; font-weight: 600; }
-.module-features ul { padding-left: 20px; line-height: 1.9; margin-top: 14px; }
-.module-product-body .stack-tags { margin: 20px 0; }
 .content-refresh .stack-tags>span { font-size: 12px; padding: 6px 9px; border-radius: 7px; }
 .module-empty { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 64px 24px; border: 1px dashed #adc7c5; background: #ffffff80; border-radius: 20px; text-align: center; }
 .module-empty h2 { font-size: 26px; color: #264c53; margin: 0; }
@@ -123,13 +111,11 @@
   .content-refresh .filter-tabs { flex-wrap: nowrap; overflow-x: auto; padding: 3px 3px 10px; margin-inline: -3px; scrollbar-width: thin; }
   .content-refresh .filter-tabs button { flex-shrink: 0; font-size: 13px; }
   .content-refresh .contact-form { padding: 24px; }
-  .module-product-grid { grid-template-columns: 1fr; }
 }
 @media(max-width:520px) {
   .module-service-grid, .content-refresh .technology-grid { grid-template-columns: 1fr; }
   .module-service-card, .content-refresh .technology-card { padding: 24px; }
   .content-refresh .policy-grid { grid-template-columns: 1fr; }
-  .module-product-body { padding: 23px; }
   .footer-grid { gap: 27px; }
 }
 @media(prefers-reduced-motion:reduce) { .module-service-card { transition: none; } .module-service-card:hover { transform: none; } }
