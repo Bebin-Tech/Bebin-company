@@ -44,3 +44,11 @@ assert.equal((sitemap.match(/<image:loc>/g)||[]).length,2);
 assert.ok(sitemap.includes('<image:loc>'+canonical+'/bebin-r-founder.jpg</image:loc>'));
 const robots=await (await fetch(base+'/robots.txt')).text();assert.ok(robots.includes(`Sitemap: ${canonical}/sitemap.xml`));
 console.log('SEO checks passed: 14 canonical pages, seven actual product prices, structured data, filtered search, admin noindex, 404, sitemap and robots.');
+
+for(const path of ['/founder-profile.jpg','/bebin-r-portrait.png']){
+ for(const old of [path,'/_next/image?url='+encodeURIComponent(path)+'&w=640&q=75']){
+  const response=await fetch(base+old,{redirect:'manual'});assert.equal(response.status,308,'Retired portrait redirect '+old);
+  assert.equal(new URL(response.headers.get('location'),base).pathname,'/bebin-r-founder.jpg');
+ }
+}
+console.log('Retired portrait originals and optimized URLs redirect to the current photo.');
