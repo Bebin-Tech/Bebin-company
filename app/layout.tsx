@@ -1,4 +1,5 @@
 import { siteUrl } from '@/lib/site-url';
+import {founderPortraitPath} from '@/lib/portrait';
 import type { Metadata } from "next";
 import "./globals.css";
 import "./redesign.css";
@@ -14,7 +15,8 @@ export const metadata: Metadata = {
   description: 'Innovative Software Solutions for Students and Businesses. Final-year and college projects, ERP solutions, web applications, and mobile development by Bebin Tech.',
   metadataBase: new URL(siteUrl()),
   verification: process.env.GOOGLE_SITE_VERIFICATION ? {google:process.env.GOOGLE_SITE_VERIFICATION} : undefined,
-  openGraph: { title:'Bebin Tech — Ideas into Innovation', description:'Academic projects and professional software development for students, colleges, startups, and businesses.', type:'website', images:['/bebin-logo-clear.webp'] },
+  openGraph: { title:'Bebin Tech — Academic Projects & Software Solutions', description:'Academic projects and professional software development for students, colleges, startups, and businesses.', type:'website', images:[{url:founderPortraitPath,width:660,height:652,alt:'Bebin R — Founder & Software Developer at Bebin Tech'}] },
+  twitter: {card:'summary_large_image',images:[founderPortraitPath]},
   icons: {
     icon: "/bebin-icon.png",
     shortcut: "/bebin-icon.png",

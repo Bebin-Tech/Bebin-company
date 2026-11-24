@@ -10,6 +10,9 @@ for(const path of ['/','/projects','/about','/bebin-r','/services','/technologie
   assert.equal(new URL(canonicalTag?.[1]).href,new URL(path,canonical).href,`canonical ${path}`);
   assert.match(html,/<meta name="description" content="[^"]+"/);
   assert.ok(!html.includes('name="robots" content="noindex'),`public indexable ${path}`);
+  assert.deepEqual([...html.matchAll(/property="og:image" content="([^"]+)"/g)].map(match=>match[1]),[canonical+'/bebin-r-founder.jpg'],`Current photo is the only sharing preview ${path}`);
+  assert.equal(html.match(/name="twitter:image" content="([^"]+)"/)?.[1],canonical+'/bebin-r-founder.jpg',`Current Twitter preview ${path}`);
+  assert.ok(!html.includes('/founder-profile.jpg')&&!html.includes('/bebin-r-portrait.png'),`No retired founder images ${path}`);
   if(path==='/')assert.ok(structured(html).some(data=>data['@graph']?.some(node=>node['@type']==='Organization')));
   const id=path.split('/')[2];
   if(id){const graph=structured(html).flatMap(data=>data['@graph']||[]);const product=graph.find(node=>node['@type']==='Product');assert.equal(Number(product.offers.price),prices[id]);assert.equal(product.offers.priceCurrency,'INR');assert.equal(product.url,canonical+path);assert.ok(graph.some(node=>node['@type']==='BreadcrumbList'));}
