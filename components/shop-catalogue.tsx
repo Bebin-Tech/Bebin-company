@@ -99,7 +99,7 @@ export function ShopProjectCard({project}: {project: SoftwareProject}) {
       <span className="catalogue-category">{category}</span>
       <h2><a href={href}>{project.title}</a></h2>
       <div className="catalogue-technologies">{technologies.slice(0, 3).map(technology => <span key={technology}>{technology}</span>)}</div>
-      <div className="catalogue-price"><strong>{projectPrice(project)}</strong><span>Complete project</span></div>
+      <div className="catalogue-price"><strong>{projectPrice(project)}</strong><span>{project.handle==='billing-software-pro'?'In-progress source package':'Source code package'}</span></div>
       <div className="catalogue-actions"><a href={href} className="catalogue-details">View details</a>
         <a href={`${href}${available ? '#purchase' : ''}`} className="catalogue-buy"><ShoppingBag size={17} aria-hidden="true"/>{available ? 'Buy now' : 'Enquire'}</a></div>
     </div>
