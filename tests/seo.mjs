@@ -10,8 +10,9 @@ for(const path of ['/','/projects','/about','/bebin-r','/services','/technologie
   assert.equal(new URL(canonicalTag?.[1]).href,new URL(path,canonical).href,`canonical ${path}`);
   assert.match(html,/<meta name="description" content="[^"]+"/);
   assert.ok(!html.includes('name="robots" content="noindex'),`public indexable ${path}`);
-  assert.deepEqual([...html.matchAll(/property="og:image" content="([^"]+)"/g)].map(match=>match[1]),[canonical+'/bebin-r-founder.jpg'],`Current photo is the only sharing preview ${path}`);
-  assert.equal(html.match(/name="twitter:image" content="([^"]+)"/)?.[1],canonical+'/bebin-r-founder.jpg',`Current Twitter preview ${path}`);
+  const expectedImage=path.startsWith('/projects/')?canonical+'/project-screenshots/'+path.split('/')[2]+'.png':canonical+'/bebin-r-founder.jpg';
+  assert.deepEqual([...html.matchAll(/property="og:image" content="([^"]+)"/g)].map(match=>match[1]),[expectedImage],`Relevant image is the only sharing preview ${path}`);
+  assert.equal(html.match(/name="twitter:image" content="([^"]+)"/)?.[1],expectedImage,`Relevant Twitter preview ${path}`);
   assert.ok(!html.includes('/founder-profile.jpg')&&!html.includes('/bebin-r-portrait.png'),`No retired founder images ${path}`);
   if(path==='/')assert.ok(structured(html).some(data=>data['@graph']?.some(node=>node['@type']==='Organization')));
   const id=path.split('/')[2];
@@ -43,7 +44,7 @@ const missing=await fetch(base+'/projects/does-not-exist');assert.equal(missing.
 const removedProducts=await fetch(base+'/products',{redirect:'manual'});assert.equal(removedProducts.status,308);assert.equal(new URL(removedProducts.headers.get('location'),base).pathname,'/services');
 const sitemap=await (await fetch(base+'/sitemap.xml')).text();assert.equal((sitemap.match(/<loc>/g)||[]).length,16);assert.ok(!/\/admin|\/api\/|\.zip/.test(sitemap));
 assert.ok(!sitemap.includes(canonical+'/products'));
-assert.equal((sitemap.match(/<image:loc>/g)||[]).length,2);
+assert.equal((sitemap.match(/<image:loc>/g)||[]).length,11);
 assert.ok(sitemap.includes('<image:loc>'+canonical+'/bebin-r-founder.jpg</image:loc>'));
 const robots=await (await fetch(base+'/robots.txt')).text();assert.ok(robots.includes(`Sitemap: ${canonical}/sitemap.xml`));
 console.log('SEO checks passed: 16 canonical pages, nine actual product prices, structured data, filtered search, admin noindex, 404, sitemap and robots.');
@@ -55,3 +56,12 @@ for(const path of ['/founder-profile.jpg','/bebin-r-portrait.png']){
  }
 }
 console.log('Retired portrait originals and optimized URLs redirect to the current photo.');
+
+for(const handle of Object.keys(prices)){
+ const path='/project-screenshots/'+handle+'.png';
+ const screenshot=await fetch(base+path);assert.equal(screenshot.status,200,handle);assert.match(screenshot.headers.get('content-type')||'',/image\/png/);
+ const bytes=new Uint8Array(await screenshot.arrayBuffer());assert.deepEqual([...bytes.slice(0,8)],[137,80,78,71,13,10,26,10]);assert.ok(bytes.length>10000);
+ const legacy=await fetch(base+'/project-previews/'+handle+'.svg',{redirect:'manual'});assert.equal(legacy.status,308);assert.equal(new URL(legacy.headers.get('location'),base).pathname,path);
+ const html=await (await fetch(base+'/projects/'+handle)).text();assert.ok(html.includes(path));assert.ok(!html.includes('/project-previews/'));assert.ok(html.includes('actual application screenshot:'));
+}
+console.log('All nine real screenshots, project previews and retired placeholder redirects passed.');

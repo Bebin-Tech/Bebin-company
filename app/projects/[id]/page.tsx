@@ -12,7 +12,9 @@ export async function generateMetadata({params}:Props){
   const project=(await softwareProjects()).find(p=>p.handle===id);
   if(!project)notFound();
   const description=project.description.replace(/\s+/g,' ').trim();
-  return pageMetadata(`${project.title} — Source Code Project`,description.length>155?`${description.slice(0,152).trimEnd()}…`:description,`/projects/${project.handle}`);
+  const metadata=pageMetadata(`${project.title} — Source Code Project`,description.length>155?`${description.slice(0,152).trimEnd()}…`:description,`/projects/${project.handle}`);
+  const image=project.images.nodes[0];
+  return image?{...metadata,openGraph:{...metadata.openGraph,images:[{url:absoluteUrl(image.url),alt:image.altText||project.title}]},twitter:{...metadata.twitter,images:[absoluteUrl(image.url)]}}:metadata;
 }
 export default async function Page({params}:Props){
   const {id}=await params;
