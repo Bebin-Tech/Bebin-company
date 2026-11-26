@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 const base=process.env.SEO_TEST_URL||'http://127.0.0.1:3004';
 const canonical=process.env.SEO_CANONICAL_URL||'https://bebin-tech-projects.vercel.app';
-const prices={'college-parking':4500,'company-management':2000,'event-booking':1000,'healthwise-ai':1000,'placement-app':5000,'smart-energy':1000,'visitor-management':3500};
+const prices={'college-parking':4500,'company-management':2000,'event-booking':1000,'healthwise-ai':1000,'placement-app':5000,'smart-energy':1000,'visitor-management':3500,'soil-ai':5000,'electricity-usage-analyzer':4500};
 const structured=html=>[...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(match=>JSON.parse(match[1]));
 for(const path of ['/','/projects','/about','/bebin-r','/services','/technologies','/contact',...Object.keys(prices).map(id=>`/projects/${id}`)]){
   const response=await fetch(base+path);assert.equal(response.status,200,path);
@@ -41,12 +41,12 @@ const filtered=await (await fetch(base+'/projects?q=management')).text();assert.
 const admin=await fetch(base+'/admin');assert.match(admin.headers.get('x-robots-tag')||'',/noindex/);
 const missing=await fetch(base+'/projects/does-not-exist');assert.equal(missing.status,404);
 const removedProducts=await fetch(base+'/products',{redirect:'manual'});assert.equal(removedProducts.status,308);assert.equal(new URL(removedProducts.headers.get('location'),base).pathname,'/services');
-const sitemap=await (await fetch(base+'/sitemap.xml')).text();assert.equal((sitemap.match(/<loc>/g)||[]).length,14);assert.ok(!/\/admin|\/api\/|\.zip/.test(sitemap));
+const sitemap=await (await fetch(base+'/sitemap.xml')).text();assert.equal((sitemap.match(/<loc>/g)||[]).length,16);assert.ok(!/\/admin|\/api\/|\.zip/.test(sitemap));
 assert.ok(!sitemap.includes(canonical+'/products'));
 assert.equal((sitemap.match(/<image:loc>/g)||[]).length,2);
 assert.ok(sitemap.includes('<image:loc>'+canonical+'/bebin-r-founder.jpg</image:loc>'));
 const robots=await (await fetch(base+'/robots.txt')).text();assert.ok(robots.includes(`Sitemap: ${canonical}/sitemap.xml`));
-console.log('SEO checks passed: 14 canonical pages, seven actual product prices, structured data, filtered search, admin noindex, 404, sitemap and robots.');
+console.log('SEO checks passed: 16 canonical pages, nine actual product prices, structured data, filtered search, admin noindex, 404, sitemap and robots.');
 
 for(const path of ['/founder-profile.jpg','/bebin-r-portrait.png']){
  for(const old of [path,'/_next/image?url='+encodeURIComponent(path)+'&w=640&q=75']){
