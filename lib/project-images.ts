@@ -14,5 +14,5 @@ export const projectScreenshotViews:Record<string,string>={
 
 export function projectScreenshot(handle:string,title:string){
   const view=projectScreenshotViews[handle];
-  return view?{url:`/project-screenshots/${handle}.png`,altText:`${title} — actual application screenshot: ${view}`}:undefined;
+  return view?{url:`/project-screenshots/${handle}.jpg`,altText:`${title} — actual application screenshot: ${view}`}:undefined;
 }

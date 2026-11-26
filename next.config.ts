@@ -6,7 +6,8 @@ const projectHandles=['college-parking','company-management','event-booking','he
 const nextConfig: NextConfig = {
   async redirects(){return [
     {source:"/products",destination:"/services",permanent:true},
-    ...projectHandles.map(handle=>({source:`/project-previews/${handle}.svg`,destination:`/project-screenshots/${handle}.png`,permanent:true})),
+    ...projectHandles.map(handle=>({source:`/project-previews/${handle}.svg`,destination:`/project-screenshots/${handle}.jpg`,permanent:true})),
+    ...projectHandles.map(handle=>({source:`/project-screenshots/${handle}.png`,destination:`/project-screenshots/${handle}.jpg`,permanent:true})),
     ...retiredPortraits.map(source=>({source,destination:currentPortrait,permanent:true})),
     // Replace old optimized-image URLs as well as the original files.
     ...retiredPortraits.map(url=>({source:'/_next/image',has:[{type:'query' as const,key:'url',value:url.replaceAll('.',String.raw`\.`)}],destination:currentPortrait,permanent:true})),
